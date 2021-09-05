@@ -2,6 +2,9 @@
 ;;; Commentary:
 ;;; Code:
 
+;; Last major update is influence by
+;; https://github.com/daviwil/dotfiles/blob/master/Emacs.org#system-settings
+
 ;;  M-x toggle-debug-on-error
 ;; (debug-on-entry 'package-initialize)
 
@@ -103,6 +106,12 @@
 (set-fringe-mode 10) ;; margin left
 (setq visible-bell t)
 
+(unless dw/is-termux
+  (setq mouse-wheel-scroll-amount '(3 ((shift) . 3))) ;; one line at a time
+  (setq mouse-wheel-progressive-speed nil) ;; don't accelerate scrolling
+  (setq mouse-wheel-follow-mouse 't) ;; scroll window under mouse
+  (setq scroll-step 1) ;; keyboard scroll one line at a time
+  (setq use-dialog-box nil)) ;; Disable dialog boxes since they weren't working in Mac OSX
 
 (require 'org)
 (require 'use-package)
@@ -215,6 +224,22 @@
   :init
   (global-undo-tree-mode 1))
 
+
+;;
+(dolist (mode '(org-mode-hook))
+  (add-hook mode (lambda () (display-line-numbers-mode 0))))
+
+; (setq large-file-warning-threshold nil)
+(setq vc-follow-symlinks t)
+(setq ad-redefinition-action 'accept)
+
+(use-package doom-themes :defer t)
+(unless dw/is-termux
+  (load-theme 'doom-palenight t)
+  (doom-themes-visual-bell-config))
+
+
+
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (set-frame-parameter nil 'unsplittable t)
@@ -306,7 +331,7 @@
  '(org-agenda-files (quote ("~/demo/emacs/org-agenda.org")))
  '(package-selected-packages
    (quote
-    (use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
+    (doom-themes use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
 
 (defun jsx-mode-init ()
   (define-key jsx-mode-map (kbd "C-c d") 'jsx-display-popup-err-for-current-line)
