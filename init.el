@@ -10,7 +10,7 @@
 ;; and then use a hook to measure Emacs startup time.
 
 ;; the default is 800 kilobytes. Measurd in bytes.
-(setq gc-cons-threshold (* 50 1000 1000))
+(setq gc-cons-threshold (* 50 2000 1000))
 
 ;; profile Emacs startup
 (add-hook 'emacs-startup-hook
