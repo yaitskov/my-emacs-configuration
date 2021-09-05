@@ -238,6 +238,19 @@
   (load-theme 'doom-palenight t)
   (doom-themes-visual-bell-config))
 
+;; multiple workspaces - names groups of buffers
+(use-package perspective
+  :demand t
+  :bind (("C-M-k" . persp-switch)
+         ("C-M-n" . persp-next)
+         ("C-x C-b" . persp-list-buffers)
+         ("C-x k" . persp-kill-buffer*))
+  :custom
+  (persp-initial-frame-name "Main")
+  :config
+  ;; Running `persp-mode' multiple times resets the perspective list...
+  (unless (equal persp-mode t)
+    (persp-mode)))
 
 
 (defalias 'yes-or-no-p 'y-or-n-p)
@@ -306,15 +319,14 @@
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(haskell-indent-after-keywords
-   (quote
-    (("where" 2 0)
+   '(("where" 2 0)
      ("of" 2)
      ("do" 2)
      ("mdo" 2)
      ("rec" 2)
      ("in" 2 0)
      ("{" 2)
-     "if" "then" "else" "let")))
+     "if" "then" "else" "let"))
  '(haskell-indent-offset 2)
  '(haskell-indent-rhs-align-column 2)
  '(haskell-indentation-electric-flag t)
@@ -323,15 +335,13 @@
  '(haskell-indentation-starter-offset 2)
  '(haskell-indentation-where-post-offset 2)
  '(haskell-mode-hook
-   (quote
-    (flyspell-prog-mode haskell-indent-mode turn-on-haskell-indent)))
+   '(flyspell-prog-mode haskell-indent-mode turn-on-haskell-indent))
  '(lsp-haskell-diagnostics-on-change t)
- '(lsp-haskell-server-args (quote ("-d" "-l" "/tmp/hls.log" "--debug" "")))
+ '(lsp-haskell-server-args '("-d" "-l" "/tmp/hls.log" "--debug" ""))
  '(lsp-haskell-server-path "haskell-language-server")
- '(org-agenda-files (quote ("~/demo/emacs/org-agenda.org")))
+ '(org-agenda-files '("~/demo/emacs/org-agenda.org"))
  '(package-selected-packages
-   (quote
-    (doom-themes use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
+   '(perspective doom-themes use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck)))
 
 (defun jsx-mode-init ()
   (define-key jsx-mode-map (kbd "C-c d") 'jsx-display-popup-err-for-current-line)
