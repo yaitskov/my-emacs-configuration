@@ -70,7 +70,7 @@
 
 ;; key bindings
 
-(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
+;(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 ;; show possible key combinations in a popup
 (use-package which-key
@@ -189,15 +189,35 @@
 (use-package nvm
   :defer t)
 
+;; use command 'lsp-workspace-folders-add' to init project without meta files
 (use-package lsp-mode
+  :ensure t
+  :defer t
+  ;; :hook (lsp-mode . (lambda ()
+  ;;                    (let ((lsp-keymap-prefix "C-c l"))
+  ;;                      (lsp-enable-which-key-integration))))
+  ;; :init
+  ;; (setq lsp-keep-workspace-alive nil
+  ;;       lsp-signature-doc-lines 5
+  ;;       lsp-idle-delay 0.5
+  ;;       lsp-prefer-capf t
+  ;;       lsp-client-packages nil)
+  ;; :config
+  ;; (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
+
   ;; :straight t
-  :commands lsp ;; (lsp lsp-deffered)
-  :init (setq lsp-keymap-prefix "C-c l") ;; C-l , s-l
+  ;; :commands lsp ;; (lsp lsp-deffered)
+  ; :diminish company-mode
+  ;:init (setq lsp-keymap-prefix "C-c C-l") ;; C-l , s-l
   :hook ((typescript-mode js2-mode web-mode) . lsp)
   :bind (:map lsp-mode-map
          ("TAB" . completion-at-point))
-  ; :config (lsp-enable-which-key-integration t)
-  :custom (lsp-headerline-breadcrumb-enable nil))
+  :config (lsp-enable-which-key-integration t)
+  ;; :custom (lsp-headerline-breadcrumb-enable nil)
+)
+
+(with-eval-after-load 'lsp-mode
+  (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
 
 (dw/leader-key-def
   "l"  '(:ignore t :which-key "lsp")
@@ -523,6 +543,7 @@
 
 ;(set-frame-font "-misc-fixed-medium-r-normal--24-120-100-100-c-90-iso10646-1")
 
+
 (global-set-key "\e\C-a" 'append-to-buffer)
 (global-set-key "\e\eb" 'magit-show-refs)
 (global-set-key "\e\et" 'magit-status)
@@ -625,8 +646,8 @@
 ;; (add-hook 'post-command-hook 'my-flymake-show-help)
 (setq Buffer-menu-name-width 80)
 
-(set-frame-font "DejaVu Sans Mono-16")
 
+ ; (global-set-key "\C-M-l" 'lsp-format-region)
 (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
 
 
@@ -688,6 +709,8 @@
 (use-package diminish)
 (diminish 'undo-tree-mode)
 (diminish 'super-save-mode)
+;(diminish 'company-mode)
+(diminish 'eldoc-mode)
 
 (use-package smart-mode-line
   :disabled
@@ -720,5 +743,6 @@
       " "
       mode-line-misc-info)))
 
+; (set-frame-font "DejaVu Sans Mono-16")
 (provide 'init)
 ;;; init.el ends here
