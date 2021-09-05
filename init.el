@@ -40,6 +40,9 @@
 ;; Initialize package sources
 (require 'package)
 
+;; dash is required for lsp-mode
+(require 'dash)
+
 (setq package-archives '(("melpa" . "https://melpa.org/packages/")
                          ("melpa-stable" . "https://stable.melpa.org/packages/")
                          ("org" . "https://orgmode.org/elpa/")
@@ -188,10 +191,12 @@
 
 (use-package lsp-mode
   ;; :straight t
-  :commands lsp
+  :commands lsp ;; (lsp lsp-deffered)
+  :init (setq lsp-keymap-prefix "C-c l") ;; C-l , s-l
   :hook ((typescript-mode js2-mode web-mode) . lsp)
   :bind (:map lsp-mode-map
          ("TAB" . completion-at-point))
+  ; :config (lsp-enable-which-key-integration t)
   :custom (lsp-headerline-breadcrumb-enable nil))
 
 (dw/leader-key-def
@@ -213,6 +218,37 @@
   (setq lsp-ui-sideline-show-hover nil)
   (setq lsp-ui-doc-position 'bottom)
   (lsp-ui-doc-show))
+
+
+(use-package typescript-mode
+  :mode "\\.ts\\'"
+  ; :hook (typescript-mode . lsp-deferred)
+  :config
+  (setq typescript-indent-level 2))
+
+(defun dw/set-js-indentation ()
+  (setq js-indent-level 2)
+  (setq evil-shift-width js-indent-level)
+  (setq-default tab-width 2))
+
+(use-package js2-mode
+  :mode "\\.jsx?\\'"
+  :config
+  ;; Use js2-mode for Node scripts
+  (add-to-list 'magic-mode-alist '("#!/usr/bin/env node" . js2-mode))
+
+  ;; Don't use built-in syntax checking
+  (setq js2-mode-show-strict-warnings nil)
+
+  ;; Set up proper indentation in JavaScript and JSON files
+  (add-hook 'js2-mode-hook #'dw/set-js-indentation)
+  (add-hook 'json-mode-hook #'dw/set-js-indentation))
+
+(use-package prettier-js
+  ;; :hook ((js2-mode . prettier-js-mode)
+  ;;        (typescript-mode . prettier-js-mode))
+  :config
+  (setq prettier-js-show-errors nil))
 
 ;; (use-package lsp-haskell
 ;;  :ensure t
@@ -291,7 +327,7 @@
 
 
 
-(add-to-list 'auto-mode-alist '("\\.tsc\\'" . typescript-mode))
+; (add-to-list 'auto-mode-alist '("\\.tsc\\'" . typescript-mode))
 
 (add-to-list 'auto-mode-alist '("\\.scss\\'" . css-mode))
 (add-to-list 'auto-mode-alist '("\\.yml\\'" . python-mode))
@@ -360,7 +396,7 @@
  '(org-agenda-files (quote ("~/demo/emacs/org-agenda.org")))
  '(package-selected-packages
    (quote
-    (smart-mode-line diminish doom-themes use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
+    (dash dash-docs dash-functional prettier dired-launch smart-mode-line diminish doom-themes use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
 
 (defun jsx-mode-init ()
   (define-key jsx-mode-map (kbd "C-c d") 'jsx-display-popup-err-for-current-line)
