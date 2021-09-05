@@ -21,6 +21,18 @@
                               (time-subtract after-init-time before-init-time)))
                      gcs-done)))
 
+;; System settings
+;; I don't run Emacs on Android yet.
+
+(require 'subr-x)
+(setq dw/is-termux
+      (string-suffix-p "Android" (string-trim (shell-command-to-string "uname -a"))))
+
+(setq dw/is-guix-system (and (eq system-type 'gnu/linux)
+                             (require 'f)
+                             (string-equal (f-read "/etc/issue")
+                                           "\nThis is the GNU system.  Welcome.\n")))
+
 ;; Emacs always has terminal and
 ;;  this caused a prompt to confirm killing extern process
 (setq confirm-kill-processes nil)
