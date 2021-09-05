@@ -113,6 +113,11 @@
   (setq scroll-step 1) ;; keyboard scroll one line at a time
   (setq use-dialog-box nil)) ;; Disable dialog boxes since they weren't working in Mac OSX
 
+(use-package paren
+  :config
+  (set-face-attribute 'show-paren-match-expression nil :background "#363e4a")
+  (show-paren-mode 1))
+
 (require 'org)
 (require 'use-package)
 
