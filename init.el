@@ -62,6 +62,9 @@
 ;; On non-Guix systems, "ensure" packages by default
 (setq use-package-always-ensure (not dw/is-guix-system))
 
+;; key bindings
+
+(global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
 ;; Emacs always has terminal and
 ;;  this caused a prompt to confirm killing extern process
