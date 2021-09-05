@@ -262,6 +262,11 @@
 (use-package super-save)
 (super-save-mode +1)
 
+;;
+(use-package savehist
+  :config
+  (setq history-length 25)
+  (savehist-mode 1))
 
 
 (defalias 'yes-or-no-p 'y-or-n-p)
