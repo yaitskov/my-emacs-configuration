@@ -66,6 +66,13 @@
 
 (global-set-key (kbd "<escape>") 'keyboard-escape-quit)
 
+;; show possible key combinations in a popup
+(use-package which-key
+  :init (which-key-mode)
+  :diminish which-key-mode
+  :config
+  (setq which-key-idle-delay 0.3))
+
 ;; Emacs always has terminal and
 ;;  this caused a prompt to confirm killing extern process
 (setq confirm-kill-processes nil)
