@@ -643,5 +643,36 @@
 (diminish 'undo-tree-mode)
 (diminish 'super-save-mode)
 
+(use-package smart-mode-line
+  :disabled
+  :if dw/is-termux
+  :config
+  (setq sml/no-confirm-load-theme t)
+  (sml/setup)
+  (sml/apply-theme 'respectful)  ; Respect the theme colors
+  (setq sml/mode-width 'right
+      sml/name-width 60)
+
+  (setq-default mode-line-format
+  `("%e"
+      ,(when dw/exwm-enabled
+          '(:eval (format "[%d] " exwm-workspace-current-index)))
+      mode-line-front-space
+      evil-mode-line-tag
+      mode-line-mule-info
+      mode-line-client
+      mode-line-modified
+      mode-line-remote
+      mode-line-frame-identification
+      mode-line-buffer-identification
+      sml/pos-id-separator
+      (vc-mode vc-mode)
+      " "
+      ;mode-line-position
+      sml/pre-modes-separator
+      mode-line-modes
+      " "
+      mode-line-misc-info)))
+
 (provide 'init)
 ;;; init.el ends here
