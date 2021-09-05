@@ -1,0 +1,15 @@
+transient/
+session.*
+old/
+pack/
+*.log
+*.log~
+irc.*
+*.el~
+irs
+elpa/
+auto-save-list/
+.org-generic-id-locations
+image-dired/
+git-command/
+emojis/
