@@ -74,9 +74,12 @@
   (setq which-key-idle-delay 0.3))
 
 ;; Emacs always has terminal and
-;;  this caused a prompt to confirm killing extern process
+;; this caused a prompt to confirm killing extern process
+;; drawback it is less safe
 (setq confirm-kill-processes nil)
 
+
+;; simplify defining prefixd keybindings
 (use-package general
   :config
   (general-evil-setup t)
