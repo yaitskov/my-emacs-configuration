@@ -33,6 +33,36 @@
                              (string-equal (f-read "/etc/issue")
                                            "\nThis is the GNU system.  Welcome.\n")))
 
+
+;; Initialize package sources
+(require 'package)
+
+(setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                         ("melpa-stable" . "https://stable.melpa.org/packages/")
+                         ("org" . "https://orgmode.org/elpa/")
+                         ("elpa" . "https://elpa.gnu.org/packages/")))
+
+;; Fix an issue accessing the ELPA archive in Termux
+(when dw/is-termux
+  (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
+
+(package-initialize)
+;; (unless package-archive-contents
+;;   (package-refresh-contents))
+
+;; Initialize use-package on non-Linux platforms
+(unless (or (package-installed-p 'use-package)
+            dw/is-guix-system)
+   (package-install 'use-package))
+(require 'use-package)
+
+;; Uncomment this to get a reading on packages that get loaded at startup
+;;(setq use-package-verbose t)
+
+;; On non-Guix systems, "ensure" packages by default
+(setq use-package-always-ensure (not dw/is-guix-system))
+
+
 ;; Emacs always has terminal and
 ;;  this caused a prompt to confirm killing extern process
 (setq confirm-kill-processes nil)
@@ -97,7 +127,7 @@
 ;; (add-to-list 'load-path "~/.emacs.d/elpa/use-package-20200629.1856")
 
 ; (package-initialize)
-(require 'package)
+;(require 'package)
 (require 'use-package)
 
 (require 'haskell-mode)
@@ -451,11 +481,11 @@
 (tool-bar-mode 0)
 
 
-(add-to-list
- 'package-archives
- '("melpa" . "https://melpa.org/packages/")
- t)
-(package-initialize)
+;; (add-to-list
+;;  'package-archives
+;;  '("melpa" . "https://melpa.org/packages/")
+;;  t)
+;; (package-initialize)
 (shell)
 
 ;; (when (load "flymake" t)
