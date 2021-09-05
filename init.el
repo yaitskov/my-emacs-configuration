@@ -92,6 +92,17 @@
   (general-create-definer dw/ctrl-c-keys
     :prefix "C-c"))
 
+;; User interface
+
+(setq inhibit-splash-screen t)
+
+(tool-bar-mode 0)
+(menu-bar-mode 0)
+(scroll-bar-mode 0)        ; Disable visible scrollbar
+(tooltip-mode -1)           ; Disable tooltips
+(set-fringe-mode 10) ;; margin left
+(setq visible-bell t)
+
 
 (require 'org)
 (require 'use-package)
@@ -295,7 +306,7 @@
  '(org-agenda-files (quote ("~/demo/emacs/org-agenda.org")))
  '(package-selected-packages
    (quote
-    (general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
+    (use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
 
 (defun jsx-mode-init ()
   (define-key jsx-mode-map (kbd "C-c d") 'jsx-display-popup-err-for-current-line)
@@ -422,8 +433,6 @@
 
 ;(set-frame-font "-misc-fixed-medium-r-normal--24-120-100-100-c-90-iso10646-1")
 
-(if (fboundp 'menu-bar-mode) (menu-bar-mode -1))
-
 (global-set-key "\e\C-a" 'append-to-buffer)
 (global-set-key "\e\eb" 'magit-show-refs)
 (global-set-key "\e\et" 'magit-status)
@@ -493,9 +502,7 @@
 (global-set-key "\C-xO" '(lambda nil (interactive) (other-window -1)))
 
 
-; (set-face-attribute 'default nil :height 200)
-(setq inhibit-splash-screen t)
-(tool-bar-mode 0)
+
 
 
 ;; (add-to-list
