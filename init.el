@@ -189,7 +189,11 @@
 
 ;; )
 
-(global-undo-tree-mode)
+;; vim like undo with all version as tree
+(use-package undo-tree
+  :init
+  (global-undo-tree-mode 1))
+
 (defalias 'yes-or-no-p 'y-or-n-p)
 
 (set-frame-parameter nil 'unsplittable t)
