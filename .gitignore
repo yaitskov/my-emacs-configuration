@@ -13,3 +13,5 @@ auto-save-list/
 image-dired/
 git-command/
 emojis/
+/history
+.lsp-session-v*
