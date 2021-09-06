@@ -274,6 +274,11 @@
   :config
   (setq prettier-js-show-errors nil))
 
+;; c++ backend installation: "nix-env -i ccls"
+(use-package ccls
+  :hook ((c-mode c++-mode objc-mode cuda-mode) .
+         (lambda () (require 'ccls) (lsp))))
+
 ;; (use-package lsp-haskell
 ;;  :ensure t
 ;;  :config
@@ -417,10 +422,11 @@
  '(lsp-haskell-diagnostics-on-change t)
  '(lsp-haskell-server-args (quote ("-d" "-l" "/tmp/hls.log" "--debug" "")))
  '(lsp-haskell-server-path "haskell-language-server")
+ '(lsp-keymap-prefix "C-c l")
  '(org-agenda-files (quote ("~/demo/emacs/org-agenda.org")))
  '(package-selected-packages
    (quote
-    (dash dash-docs dash-functional prettier dired-launch smart-mode-line diminish doom-themes use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
+    (ccls dash dash-docs dash-functional prettier dired-launch smart-mode-line diminish doom-themes use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
 
 (defun jsx-mode-init ()
   (define-key jsx-mode-map (kbd "C-c d") 'jsx-display-popup-err-for-current-line)
