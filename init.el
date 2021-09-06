@@ -191,8 +191,8 @@
 
 ;; use command 'lsp-workspace-folders-add' to init project without meta files
 (use-package lsp-mode
-  :ensure t
-  :defer t
+  ; :ensure t
+  ; :defer t
   ;; :hook (lsp-mode . (lambda ()
   ;;                    (let ((lsp-keymap-prefix "C-c l"))
   ;;                      (lsp-enable-which-key-integration))))
@@ -206,15 +206,19 @@
   ;; (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
 
   ;; :straight t
-  ;; :commands lsp ;; (lsp lsp-deffered)
+  :commands lsp ;; (lsp lsp-deffered)
   ; :diminish company-mode
-  ;:init (setq lsp-keymap-prefix "C-c C-l") ;; C-l , s-l
-  :hook ((typescript-mode js2-mode web-mode) . lsp)
+  ;; :init (setq lsp-keymap-prefix "C-c C-l") ;; C-l , s-l
+  :hook (
+         ((typescript-mode js2-mode web-mode) . lsp)
+         (lsp-mode . lsp-enable-which-key-integration)
+         )
   :bind (:map lsp-mode-map
          ("TAB" . completion-at-point))
-  :config (lsp-enable-which-key-integration t)
+  ; :config (lsp-enable-which-key-integration t)
   ;; :custom (lsp-headerline-breadcrumb-enable nil)
 )
+(define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
 
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
