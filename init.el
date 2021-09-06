@@ -53,6 +53,23 @@
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
 (package-initialize)
+; (package-refresh-contents)
+
+(require 'use-package)
+(require 'haskell-mode)
+(require 'lsp)
+(require 'lsp-ui)
+(require 'yasnippet)
+(require 'lsp-haskell)
+(require 'lsp-treemacs)
+;(require 'dap-mode)
+;(require 'lsp-origami)
+;(require 'lsp-pyright-ms)
+(require 'company)
+(require 'flycheck)
+
+(yas-global-mode)
+(add-hook 'prog-mode-hook 'lsp)
 ;; (unless package-archive-contents
 ;;   (package-refresh-contents))
 
@@ -122,7 +139,7 @@
   (show-paren-mode 1))
 
 (require 'org)
-(require 'use-package)
+;(require 'use-package)
 
 
 
@@ -134,83 +151,27 @@
   :config
   (setq explicit-shell-file-name "bash")
   (setq term-prompt-regexp "$ "))
-;; (defadvice switch-to-buffer (before save-buffer-now activate)
-;;   (when buffer-file-name (save-buffer)))
-
-;; (defadvice switch-to-buffer (before save-buffer-now)
-;;   (save-buffer))
-
-;; (ad-activate 'switch-to-buffer)
-
 
 (if (and (version< emacs-version "26.3") (>= libgnutls-version 30604))
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
-;(add-to-list 'load-path "~/.emacs.d/lisp")
 (add-to-list 'load-path "~/.emacs.d/elpa")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/openwith-20120531.2136")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/super-save-20190806.915")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/purescript-mode-20200708.827")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/flycheck-20200610.1809")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/flycheck-haskell-20200218.753")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/ztree-20191108.2234")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/dash-20200524.1947")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/gitconfig-mode-20180318.1956")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/git-lens-20190319.1342")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/nix-mode-20200521.1745")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/lsp-docker-20200222.505")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/lsp-haskell-20200527.2014")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/lsp-java-20200701.2040")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/lsp-latex-20200701.931")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/lsp-mode-20200712.1933")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/lsp-treemacs-20200710.532")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/lsp-ui-20200703.448")
-;; (add-to-list 'load-path "~/.emacs.d/elpa/use-package-20200629.1856")
-
-; (package-initialize)
-;(require 'package)
-(require 'use-package)
-
-(require 'haskell-mode)
-
-;(add-hook 'haskell-mode-hook 'lsp)
-; (add-hook 'haskell-mode-hook #'lsp)
-; (add-hook 'haskell-literate-mode-hook #'lsp)
-
 
 ;; config before
-; (require 'lsp)
-(require 'lsp)
-(require 'lsp-haskell)
-;; Hooks so haskell and literate haskell major modes trigger LSP setup
-(add-hook 'haskell-mode-hook #'lsp)
-(add-hook 'haskell-literate-mode-hook #'lsp)
 
-(use-package nvm
-  :defer t)
+(use-package nvm :defer t)
+
+;; (use-package flycheck
+;;   :ensure t
+;;   :init
+;;   (global-flycheck-mode t))
 
 ;; use command 'lsp-workspace-folders-add' to init project without meta files
 (use-package lsp-mode
-  ; :ensure t
-  ; :defer t
-  ;; :hook (lsp-mode . (lambda ()
-  ;;                    (let ((lsp-keymap-prefix "C-c l"))
-  ;;                      (lsp-enable-which-key-integration))))
-  ;; :init
-  ;; (setq lsp-keep-workspace-alive nil
-  ;;       lsp-signature-doc-lines 5
-  ;;       lsp-idle-delay 0.5
-  ;;       lsp-prefer-capf t
-  ;;       lsp-client-packages nil)
-  ;; :config
-  ;; (define-key lsp-mode-map (kbd "C-c l") lsp-command-map)
-
-  ;; :straight t
-  :commands lsp ;; (lsp lsp-deffered)
-  ; :diminish company-mode
-  ;; :init (setq lsp-keymap-prefix "C-c C-l") ;; C-l , s-l
+  :commands lsp
   :hook (
-         ((typescript-mode js2-mode web-mode) . lsp)
+         ((typescript-mode js2-mode web-mode sh-mode haskell-mode) . lsp)
+         ; (haskell-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration)
          )
   :bind (:map lsp-mode-map
@@ -220,8 +181,21 @@
 )
 (define-key lsp-mode-map (kbd "C-c C-l") lsp-command-map)
 
+
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
+
+(use-package lsp-haskell
+  :ensure t
+  :config
+  (setq lsp-haskell-server-path "/home/dan/.local/bin/haskell-language-server-wrapper")
+  (setq lsp-haskell-process-path-hie "/home/dan/.local/bin/haskell-language-server-wrapper")
+  (setq lsp-haskell-server-args ("--debug"))
+  ;; Comment/uncomment this line to see interactions between lsp client/server.
+  (setq lsp-log-io t))
+;; Hooks so haskell and literate haskell major modes trigger LSP setup
+;(add-hook 'haskell-mode-hook #'lsp)
+;(add-hook 'haskell-literate-mode-hook #'lsp)
 
 (dw/leader-key-def
   "l"  '(:ignore t :which-key "lsp")
@@ -273,6 +247,9 @@
   ;;        (typescript-mode . prettier-js-mode))
   :config
   (setq prettier-js-show-errors nil))
+
+;; lsp-mode supports bash out of the box
+;; bash backend isntallation: sudo npm i -g bash-language-server
 
 ;; c++ backend installation: "nix-env -i ccls"
 (use-package ccls
@@ -420,13 +397,13 @@
    (quote
     (flyspell-prog-mode haskell-indent-mode turn-on-haskell-indent)))
  '(lsp-haskell-diagnostics-on-change t)
- '(lsp-haskell-server-args (quote ("-d" "-l" "/tmp/hls.log" "--debug" "")))
- '(lsp-haskell-server-path "haskell-language-server")
+ ;'(lsp-haskell-server-args (quote ("-d" "-l" "/tmp/hls.log" "--debug" "")))
+ ;'(lsp-haskell-server-path "/home/dan/.local/bin/haskell-language-server")
  '(lsp-keymap-prefix "C-c l")
  '(org-agenda-files (quote ("~/demo/emacs/org-agenda.org")))
  '(package-selected-packages
    (quote
-    (ccls dash dash-docs dash-functional prettier dired-launch smart-mode-line diminish doom-themes use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
+    (yascroll yasnippet lsp-python-ms lsp-pyright lsp-origami daemons dante dap-mode ccls dash dash-docs dash-functional prettier dired-launch smart-mode-line diminish doom-themes use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
 
 (defun jsx-mode-init ()
   (define-key jsx-mode-map (kbd "C-c d") 'jsx-display-popup-err-for-current-line)
