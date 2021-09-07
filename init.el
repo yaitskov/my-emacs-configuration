@@ -52,6 +52,7 @@
 (when dw/is-termux
   (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
+(add-to-list 'load-path "~/.emacs.d/elpa")
 (package-initialize)
 ; (package-refresh-contents)
 
@@ -60,9 +61,9 @@
 (require 'lsp)
 (require 'lsp-ui)
 (require 'yasnippet)
-(require 'lsp-haskell)
+;(require 'lsp-haskell)
 (require 'lsp-treemacs)
-;(require 'dap-mode)
+(require 'dap-mode)
 ;(require 'lsp-origami)
 ;(require 'lsp-pyright-ms)
 (require 'company)
@@ -155,7 +156,7 @@
 (if (and (version< emacs-version "26.3") (>= libgnutls-version 30604))
     (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3"))
 
-(add-to-list 'load-path "~/.emacs.d/elpa")
+
 
 ;; config before
 
@@ -170,7 +171,8 @@
 (use-package lsp-mode
   :commands lsp
   :hook (
-         ((typescript-mode js2-mode web-mode sh-mode haskell-mode) . lsp)
+         ((typescript-mode js2-mode web-mode sh-mode) . lsp)
+         ; haskell-mode is broken
          ; (haskell-mode . lsp)
          (lsp-mode . lsp-enable-which-key-integration)
          )
@@ -185,14 +187,14 @@
 (with-eval-after-load 'lsp-mode
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration))
 
-(use-package lsp-haskell
-  :ensure t
-  :config
-  (setq lsp-haskell-server-path "/home/dan/.local/bin/haskell-language-server-wrapper")
-  (setq lsp-haskell-process-path-hie "/home/dan/.local/bin/haskell-language-server-wrapper")
-  (setq lsp-haskell-server-args ("--debug"))
-  ;; Comment/uncomment this line to see interactions between lsp client/server.
-  (setq lsp-log-io t))
+;; (use-package lsp-haskell
+;;   :ensure t
+;;   :config
+;;   (setq lsp-haskell-server-path "/home/dan/.local/bin/haskell-language-server-wrapper")
+;;   (setq lsp-haskell-process-path-hie "/home/dan/.local/bin/haskell-language-server-wrapper")
+;;   ;(setq lsp-haskell-server-args ("-d -l /tmp/hls.log"))
+;;   ;; Comment/uncomment this line to see interactions between lsp client/server.
+;;   (setq lsp-log-io t))
 ;; Hooks so haskell and literate haskell major modes trigger LSP setup
 ;(add-hook 'haskell-mode-hook #'lsp)
 ;(add-hook 'haskell-literate-mode-hook #'lsp)
@@ -211,10 +213,10 @@
 (use-package lsp-ui
   ;; :straight t
   :hook (lsp-mode . lsp-ui-mode)
-  :config
-  (setq lsp-ui-sideline-enable t)
-  (setq lsp-ui-sideline-show-hover nil)
-  (setq lsp-ui-doc-position 'bottom)
+  ;:config
+  ;(setq lsp-ui-sideline-enable t)
+  ; (setq lsp-ui-sideline-show-hover nil)
+  ;(setq lsp-ui-doc-position 'bottom)
   (lsp-ui-doc-show))
 
 
@@ -396,14 +398,14 @@
  '(haskell-mode-hook
    (quote
     (flyspell-prog-mode haskell-indent-mode turn-on-haskell-indent)))
- '(lsp-haskell-diagnostics-on-change t)
+ ;'(lsp-haskell-diagnostics-on-change t)
  ;'(lsp-haskell-server-args (quote ("-d" "-l" "/tmp/hls.log" "--debug" "")))
  ;'(lsp-haskell-server-path "/home/dan/.local/bin/haskell-language-server")
  '(lsp-keymap-prefix "C-c l")
  '(org-agenda-files (quote ("~/demo/emacs/org-agenda.org")))
  '(package-selected-packages
    (quote
-    (yascroll yasnippet lsp-python-ms lsp-pyright lsp-origami daemons dante dap-mode ccls dash dash-docs dash-functional prettier dired-launch smart-mode-line diminish doom-themes use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs lsp-haskell poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
+    (yascroll yasnippet lsp-python-ms lsp-pyright lsp-origami daemons dante dap-mode ccls dash dash-docs dash-functional prettier dired-launch smart-mode-line diminish doom-themes use-package general nvm js2-mode xref xref-js2 ivy-xref typing-game multi-vterm multi-term dockerfile-mode org-gcal undo-tree terraform-mode company-ghci company-lsp projectile treemacs-magit treemacs company which-key lsp-ui lsp-treemacs  poly-R ess fancy-battery ormolu graphviz-dot-mode yaml-mode magit-find-file magit-imerge magit git-blamed git-commit git-command lsp-mode nix-mode flycheck-haskell super-save openwith ztree gitconfig-mode git-lens elm-mode skewer-mode slack typescript-mode purescript-mode haskell-mode flycheck))))
 
 (defun jsx-mode-init ()
   (define-key jsx-mode-map (kbd "C-c d") 'jsx-display-popup-err-for-current-line)
